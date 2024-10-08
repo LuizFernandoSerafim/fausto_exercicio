@@ -1,0 +1,35 @@
+networks:
+  banco:
+  web:
+  fila: 
+# -------- <recorte>
+  app:
+    image: python:3.6
+    volumes:
+    # Aplicação
+    - ./app:/app
+    working_dir: /app
+    command: bash ./app.sh
+    networks:
+    - banco
+    - web
+    - fila ②
+    depends_on:
+    - db
+    - queue
+  worker: 
+    image: python:3.6
+    volumes:
+    # Worker
+    - ./worker:/worker
+    working_dir: /worker
+    command: ./app.sh
+    networks:
+    - fila
+    depends_on:
+    - queue
+    - app
+  queue: 
+    image: redis:3.2
+    networks:
+    - fila

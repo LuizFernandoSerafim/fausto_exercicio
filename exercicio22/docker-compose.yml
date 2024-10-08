@@ -1,0 +1,16 @@
+app:
+  image: python:3.6
+  environment:
+    - DB_NAME=email_sender 
+  volumes:
+    # Aplicação
+    - ./app:/app
+  working_dir: /app
+  command: bash ./app.sh
+  networks:
+    - banco
+    - web
+    - fila
+  depends_on:
+    - db
+    - queue
